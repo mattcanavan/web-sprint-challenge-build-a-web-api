@@ -1,4 +1,4 @@
-# Sprint Challenge Instructions
+# Sprint Challenge Instructions (with auto grader)
 
 **Read these instructions carefully. Understand exactly what is expected _before_ starting this Sprint Challenge.**
 
