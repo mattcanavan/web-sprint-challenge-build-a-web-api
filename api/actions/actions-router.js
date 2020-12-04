@@ -1,4 +1,3 @@
-const { json } = require('express');
 const express = require('express');
 const ActionsFuncs = require('./actions-model');
 
@@ -23,7 +22,11 @@ router.get("/:id", (req, res) => {
 
     ActionsFuncs.get(id)
     .then(success => {
-        res.status(200).json(success)
+        if(success !== null){
+            res.status(200).json(success)
+        } else {
+            res.status(404).json({ message: `post with id ${id} not found.`})
+        }
     })
     .catch(error => {
         res.status(500).json({ message: error.message })
@@ -33,24 +36,26 @@ router.get("/:id", (req, res) => {
 
 // [POST] /api/actions sends the newly created action as the body of the response.
 router.post("/", (req, res) => {
+    const newAction = req.body
 
-    if(!req.body.project_id){
-        res.status(400).json({ message: "missing required project_id"})
-    } else{
-        ActionsFuncs.insert(req.body)
-        .then(success => {
-            res.json(201).json({ message: `successfully added ${req.body}`})
-        })
-        .catch(error => {
-            res.status(500).json({ message: error.message })
-        })
-
+    if (!req.body.project_id || !req.body.description || !req.body.notes) {
+        res.status(400).json({ message: "missing required field" });
+    } else {
+        ActionsFuncs.insert(newAction)
+            .then(success => {
+                res.status(201).json(success);
+            })
+            .catch((error) => {
+                res.status(500).json({ message: error.message });
+            });
     }
-})
+
+});
 
 // [PUT] /api/actions/:id sends the updated action as the body of the response.
 router.put("/:id", (req, res) => {
   const { id } = req.params;
+
 
   if (id) {
     ActionsFuncs.get(id) //if id not found returning null (not error). need to catch!
