@@ -53,7 +53,7 @@ router.post("/", (req, res) => {
 router.put("/:id", (req, res) => {
     const { id } = req.params;
 
-    if(!req.body){
+    if(!req.body.name || !req.body.description){
         res.status(400).json({ message: "req.body missing either name or description to be updated."})
     } else{
         ProjectFuncs.update(id, req.body)
