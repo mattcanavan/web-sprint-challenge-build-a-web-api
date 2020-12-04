@@ -85,8 +85,17 @@ router.delete("/:id", (req, res) => {
 })
 
 // [GET] /api/projects/:id/actions sends an array of actions (or an empty array) as the body of the response.
-router.get("/:id/actions")
+router.get("/:id/actions", (req, res) => {
+    const { id } = req.params;
 
+    ProjectFuncs.getProjectActions(id)
+    .then(success => {
+        res.status(200).json(success)
+    })
+    .catch(error => {
+        res.status(500).json({ message: error.message })
+    })
+})
 
 
 
